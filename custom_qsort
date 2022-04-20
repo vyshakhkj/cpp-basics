@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int compare(const void* p1, const void* p2) {
+	return (*(int*)p1 - *(int*)p2);
+}
+
+void vsort(void *base, size_t nitems, size_t size, int (*comp) (const void*, const void*)) {
+	for(int i = 0; i < nitems; i++) {
+		for(int j = 0; j < nitems - i - 1; j++) {
+			char *a1 = (char *)base + j * size;
+			char *a2 = (char *) base + (j+1) * size;
+			if(comp(a1, a2)  > 0) {
+				void *buffer = (void *) malloc(size);
+				memcpy(buffer, a1 , size);
+				memcpy(a1, a2, size);
+				memcpy(a2, buffer, size);
+			}
+		}
+	}
+}	
+
+int main(int argc, char *argv[]) {
+	if(argc <= 1) {
+		printf("Please enter the arguments");
+		return 0;
+	}
+	
+	int len = argc - 1;
+	int *arr = (int *) malloc(len * sizeof(int));
+	for(int i = 1; i < argc; i++) {
+		arr[i - 1] = atoi(argv[i]);
+	}
+	
+	vsort(arr, len, sizeof(int), compare);
+	
+	printf("Sorted values : \n");
+	for(int i = 0; i < len; i++) {
+		printf("%d \n", arr[i]);
+	}
+}
+
