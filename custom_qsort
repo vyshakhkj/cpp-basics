@@ -7,18 +7,19 @@ int compare(const void* p1, const void* p2) {
 }
 
 void vsort(void *base, size_t nitems, size_t size, int (*comp) (const void*, const void*)) {
+	void *buffer = (void *) malloc(size);
 	for(int i = 0; i < nitems; i++) {
 		for(int j = 0; j < nitems - i - 1; j++) {
 			char *a1 = (char *)base + j * size;
 			char *a2 = (char *) base + (j+1) * size;
-			if(comp(a1, a2)  > 0) {
-				void *buffer = (void *) malloc(size);
+			if(comp(a1, a2)  > 0) {				
 				memcpy(buffer, a1 , size);
 				memcpy(a1, a2, size);
 				memcpy(a2, buffer, size);
 			}
 		}
 	}
+	free(buffer);
 }	
 
 int main(int argc, char *argv[]) {
@@ -39,5 +40,8 @@ int main(int argc, char *argv[]) {
 	for(int i = 0; i < len; i++) {
 		printf("%d \n", arr[i]);
 	}
+	free(arr);
 }
+
+
 
